@@ -1,7 +1,10 @@
+import { deleteHero } from '../../actions/index';
+import { useDispatch } from 'react-redux';
 
-const HeroesListItem = ({name, description, element}) => {
+const HeroesListItem = ({id, name, description, element}) => {
 
     let elementClassName;
+    const dispatch = useDispatch();
 
     switch (element) {
         case 'fire':
@@ -33,7 +36,7 @@ const HeroesListItem = ({name, description, element}) => {
                 <p className="card-text">{description}</p>
             </div>
             <span className="position-absolute top-0 start-100 translate-middle badge border rounded-pill bg-light">
-                <button type="button" className="btn-close btn-close" aria-label="Close"></button>
+                <button onClick={() => dispatch(deleteHero(id))} type="button" className="btn-close btn-close" aria-label="Close"></button>
             </span>
         </li>
     )

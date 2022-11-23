@@ -1,8 +1,10 @@
 import { deleteHero } from '../../actions/index';
 import { useDispatch } from 'react-redux';
+import {useHttp} from '../../hooks/http.hook';
 
 const HeroesListItem = ({id, name, description, element}) => {
 
+    const {request} = useHttp();
     let elementClassName;
     const dispatch = useDispatch();
 
@@ -36,7 +38,7 @@ const HeroesListItem = ({id, name, description, element}) => {
                 <p className="card-text">{description}</p>
             </div>
             <span className="position-absolute top-0 start-100 translate-middle badge border rounded-pill bg-light">
-                <button onClick={() => dispatch(deleteHero(id))} type="button" className="btn-close btn-close" aria-label="Close"></button>
+                <button onClick={() => {dispatch(deleteHero(id)); request(`http://localhost:3001/heroes/${id}`, 'DELETE')}} type="button" className="btn-close btn-close" aria-label="Close"></button>
             </span>
         </li>
     )

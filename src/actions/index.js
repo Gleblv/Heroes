@@ -23,3 +23,10 @@ export const deleteHero = (heroId) => {
         payload: heroId
     }
 }
+
+export const addHero = (data) => {
+    return {
+        type: "ADD_HERO",
+        payload: data
+    }
+}

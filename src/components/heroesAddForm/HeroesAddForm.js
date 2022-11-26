@@ -1,4 +1,7 @@
-
+import { v4 as uuidv4 } from 'uuid';
+import {addHero} from '../../actions';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 
 // Задача для этого компонента:
 // Реализовать создание нового героя с введенными данными. Он должен попадать
@@ -11,6 +14,23 @@
 // данных из фильтров
 
 const HeroesAddForm = () => {
+    const dispatch = useDispatch();
+
+    const [heroName, setHeroName] = useState(null);
+    const [heroDescription, setHeroDescription] = useState(null);
+    const [element, setElement] = useState(null);
+
+    const getHeroData = (name, description, element) => {
+        const id = uuidv4();
+
+        return {
+            id,
+            name,
+            description,
+            element
+        }
+    }
+
     return (
         <form className="border p-4 shadow-lg rounded">
             <div className="mb-3">
@@ -21,7 +41,9 @@ const HeroesAddForm = () => {
                     name="name" 
                     className="form-control" 
                     id="name" 
-                    placeholder="Как меня зовут?"/>
+                    placeholder="Как меня зовут?"
+                    onChange={(e) => setHeroName(e.target.value)}
+                    value={heroName}/>
             </div>
 
             <div className="mb-3">
@@ -32,7 +54,9 @@ const HeroesAddForm = () => {
                     className="form-control" 
                     id="text" 
                     placeholder="Что я умею?"
-                    style={{"height": '130px'}}/>
+                    style={{"height": '130px'}}
+                    onChange={(e) => setHeroDescription(e.target.value)}
+                    value={heroDescription}/>
             </div>
 
             <div className="mb-3">
@@ -41,7 +65,9 @@ const HeroesAddForm = () => {
                     required
                     className="form-select" 
                     id="element" 
-                    name="element">
+                    name="element"
+                    onClick={(e) => setElement(e.target.value)}
+                    value={element}>
                     <option >Я владею элементом...</option>
                     <option value="fire">Огонь</option>
                     <option value="water">Вода</option>
@@ -50,7 +76,7 @@ const HeroesAddForm = () => {
                 </select>
             </div>
 
-            <button type="submit" className="btn btn-primary">Создать</button>
+            <button onClick={(e) => {e.preventDefault(); dispatch(addHero(getHeroData(heroName, heroDescription, element)))}} type="submit" className="btn btn-primary">Создать</button>
         </form>
     )
 }

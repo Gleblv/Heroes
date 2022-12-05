@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import {addHero} from '../../actions';
 import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {useHttp} from '../../hooks/http.hook';
 
 // Задача для этого компонента:
@@ -18,9 +18,25 @@ const HeroesAddForm = () => {
     const dispatch = useDispatch();
     const {request} = useHttp();
 
-    const [heroName, setHeroName] = useState(null);
+    const [heroName, setHeroName] = useState('');
     const [heroDescription, setHeroDescription] = useState(null);
     const [element, setElement] = useState(null);
+    const [filtres, setFiltres] = useState(null);
+
+    useEffect(() => {
+        request("http://localhost:3001/filters", "GET")
+            .then(data => setFiltres(data));
+    }, []);
+
+    const getFiltresList = (arr) => {
+        return !arr ? null : arr.map(item => {
+            return (
+                item === "all" ? <option key={uuidv4()}>Я владею элементом...</option> : <option key={uuidv4()} value={item}>{item}</option>
+            )
+        })
+    }
+
+    const filtresList = getFiltresList(filtres);
 
     const getHeroData = (name, description, element) => {
         const id = uuidv4();
@@ -72,11 +88,7 @@ const HeroesAddForm = () => {
                     name="element"
                     onClick={(e) => setElement(e.target.value)}
                     value={element}>
-                    <option >Я владею элементом...</option>
-                    <option value="fire">Огонь</option>
-                    <option value="water">Вода</option>
-                    <option value="wind">Ветер</option>
-                    <option value="earth">Земля</option>
+                    {filtresList}
                 </select>
             </div>
 

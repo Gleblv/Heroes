@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useHttp } from "../../hooks/http.hook";
 import { useState, useEffect } from "react";
 

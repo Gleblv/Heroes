@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useHttp } from "../../hooks/http.hook";
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { filterHeroes } from '../../actions/index';
 
 // Задача для этого компонента:
 // Фильтры должны формироваться на основании загруженных данных
@@ -10,19 +9,13 @@ import { useState, useEffect } from "react";
 // Представьте, что вы попросили бэкенд-разработчика об этом
 
 const HeroesFilters = () => {
-    const {request} = useHttp();
-
-    const [filtres, setFiltres] = useState(null);
-
-    useEffect(() => {
-        request("http://localhost:3001/filters", "GET")
-            .then(data => setFiltres(data));
-    }, []);
+    const dispatch = useDispatch();
+    const filtres = useSelector(state => state.filtres);
 
     const getFiltresList = (arr) => {
         return !arr ? null : arr.map(item => {
             return (
-                <button className={item}>{item}</button>
+                <button onClick={() => dispatch(filterHeroes(item))} className={item}>{item}</button>
             )
         })
     }

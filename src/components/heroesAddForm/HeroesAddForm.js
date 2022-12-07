@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { v4 as uuidv4 } from 'uuid';
 import {addHero} from '../../actions';
-import { useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import {useHttp} from '../../hooks/http.hook';
 
 // Задача для этого компонента:
@@ -20,14 +20,10 @@ const HeroesAddForm = () => {
     const {request} = useHttp();
 
     const [heroName, setHeroName] = useState('');
-    const [heroDescription, setHeroDescription] = useState(null);
-    const [element, setElement] = useState(null);
-    const [filtres, setFiltres] = useState(null);
+    const [heroDescription, setHeroDescription] = useState('');
+    const [element, setElement] = useState('');
 
-    useEffect(() => {
-        request("http://localhost:3001/filters", "GET")
-            .then(data => setFiltres(data));
-    }, []);
+    const filtres = useSelector(state => state.filtres);
 
     const getFiltresList = (arr) => {
         return !arr ? null : arr.map(item => {

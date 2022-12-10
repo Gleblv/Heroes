@@ -1,5 +1,7 @@
+/* eslint-disable default-case */
 import { useSelector, useDispatch } from "react-redux";
 import { filterHeroes } from '../../actions/index';
+import { v4 as uuidv4 } from 'uuid';
 
 // Задача для этого компонента:
 // Фильтры должны формироваться на основании загруженных данных
@@ -13,9 +15,30 @@ const HeroesFilters = () => {
     const filtres = useSelector(state => state.filtres);
 
     const getFiltresList = (arr) => {
+        let className = "";
         return !arr ? null : arr.map(item => {
+            switch(item) {
+                case "all":
+                    className = "btn btn-outline-dark";
+                    break;
+                case "fire":
+                    className = "btn btn-danger";
+                    break;
+                case "water":
+                    className = "btn btn-primary";
+                    break;
+                case "wind":
+                    className = "btn btn-success";
+                    break;
+                case "earth":
+                    className = "btn btn-secondary";
+                    break;
+                default:
+                    return className;
+            }
+
             return (
-                <button onClick={() => dispatch(filterHeroes(item))} className={item}>{item}</button>
+                <button key={uuidv4()} onClick={() => dispatch(filterHeroes(item))} className={className}>{item}</button>
             )
         })
     }

@@ -11,6 +11,12 @@
       "name": "Неизвестный герой",
       "description": "Скрывающийся в тени",
       "element": "wind"
+    },
+    {
+      "id": "8ce94db3-f78a-438a-b6c7-ee7ec4fef042",
+      "name": "Третий герой",
+      "description": "Лучшая защита",
+      "element": "earth"
     }
   ],
   "filters": [

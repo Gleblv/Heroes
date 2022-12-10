@@ -34,7 +34,8 @@ const reducer = (state = initialState, action) => {
             const newHero = action.payload;
             return {
                 ...state,
-                heroes: [...state.heroes, newHero]
+                heroes: [...state.heroes, newHero],
+                allHeroes: [...state.heroes, newHero]
             }
         case "GET_FILTRES":
             return {

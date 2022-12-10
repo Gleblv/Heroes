@@ -83,7 +83,7 @@ const HeroesAddForm = () => {
                     className="form-select" 
                     id="element" 
                     name="element"
-                    onClick={(e) => setElement(e.target.value)}
+                    onChange={(e) => setElement(e.target.value)}
                     value={element}>
                     {filtresList}
                 </select>

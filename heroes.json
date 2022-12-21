@@ -11,12 +11,6 @@
       "name": "Морской герой",
       "description": "Как аквамен, но не из DC",
       "element": "water"
-    },
-    {
-      "id": "a0169331-85a4-4b27-ae7a-2bbb2f72eb32",
-      "name": "Вова",
-      "description": "Пить водку",
-      "element": "water"
     }
   ],
   "filters": [

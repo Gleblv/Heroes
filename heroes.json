@@ -7,9 +7,9 @@
       "element": "wind"
     },
     {
-      "id": 3,
-      "name": "Морской герой",
-      "description": "Как аквамен, но не из DC",
+      "id": "d1525a8a-8f5d-4fb2-967f-582d1ca62e89",
+      "name": "Вова",
+      "description": "Пить водку",
       "element": "water"
     }
   ],

@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
-import { fetchFiltres } from './filtresSlice';
-import { activeFilterChanged } from './filtresSlice';
+import { fetchFiltres, activeFilterChanged, selectAll } from './filtresSlice';
 import Spinner from '../spinner/Spinner';
 
 // Задача для этого компонента:
@@ -13,7 +12,8 @@ import Spinner from '../spinner/Spinner';
 
 const HeroesFilters = () => {
 
-    const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state.filters);
+    const {filtersLoadingStatus, activeFilter} = useSelector(state => state.filters);
+    const filtres = useSelector(state => selectAll(state)); // получаем общий стейт, т.к. функция должна получать его как аргумент
     const dispatch = useDispatch();
 
     // Запрос на сервер для получения фильтров и последовательной смены состояния
@@ -51,7 +51,7 @@ const HeroesFilters = () => {
         })
     }
 
-    const elements = renderFilters(filters);
+    const elements = renderFilters(filtres);
 
     return (
         <div className="card shadow-lg mt-4">

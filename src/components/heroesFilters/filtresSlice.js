@@ -1,11 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
 import { useHttp } from "../../hooks/http.hook";
 
-const initialState = {
-    filters: [],
+const filtresAdapter = createEntityAdapter();
+
+const initialState = filtresAdapter.getInitialState({
     filtersLoadingStatus: 'idle',
     activeFilter: 'all'
-}
+});
+
+// const initialState = {
+//     filters: [],
+//     filtersLoadingStatus: 'idle',
+//     activeFilter: 'all'
+// }
 
 export const fetchFiltres = createAsyncThunk(
     'filtres/fetchFiltres',
@@ -16,7 +23,7 @@ export const fetchFiltres = createAsyncThunk(
 );
 
 const filtresSlice = createSlice({
-    name: 'filtres',
+    name: 'filters',
     initialState,
     reducers: {
         activeFilterChanged: (state, action) => {
@@ -27,7 +34,7 @@ const filtresSlice = createSlice({
         builder
             .addCase(fetchFiltres.pending, state => {state.filtersLoadingStatus = 'loading'})
             .addCase(fetchFiltres.fulfilled, (state, action) => {
-                state.filters = action.payload;
+                filtresAdapter.setAll(state, action.payload);
                 state.filtersLoadingStatus = 'idle';
             })
             .addCase(fetchFiltres.rejected, state => {state.filtersLoadingStatus = 'error'})
@@ -38,6 +45,9 @@ const filtresSlice = createSlice({
 const {actions, reducer} = filtresSlice;
 
 export default reducer;
+
+export const {selectAll} = filtresAdapter.getSelectors(state => state.filters);
+
 export const {
     filtersFetching,
     filtersFetched,

@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import heroes from '../components/heroesList/heroesSlice';
 import filters from '../components/heroesFilters/filtresSlice';
+import { apiSlice } from '../components/api/apiSlice';
 
 const stringMiddleware = () => (next) => (action) => {
     if (typeof action === 'string') { // елси action приходит в качестве строки то dispatch-им нужный нам объект
@@ -35,8 +35,8 @@ const stringMiddleware = () => (next) => (action) => {
 //         );
 
 const store = configureStore({
-    reducer: {heroes, filters}, // передаём объект с reducer-ами
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware), // получаем стандартные middleware-ы и добавляем наш собственный
+    reducer: {filters, [apiSlice.reducerPath]: apiSlice.reducer}, // передаём объект с reducer-ами
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware, apiSlice.middleware), // получаем стандартные middleware-ы и добавляем наш собственный
     devTools: process.env.NODE_ENV !== 'production',
 });
 

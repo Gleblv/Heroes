@@ -1,9 +1,8 @@
-import {useHttp} from '../../hooks/http.hook';
-import { useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup} from 'react-transition-group';
+import { useGetHeroesQuery, useDeleteHeroMutation } from '../api/apiSlice';
 
-import { fetchHeroes, heroDeleted, filtredHeroesSelector } from './heroesSlice';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -23,32 +22,42 @@ const HeroesList = () => {
     //     }
     // })
 
-    const filtredHeroes = useSelector(filtredHeroesSelector);
-    const heroesLoadingStatus = useSelector(state => state.heroes.heroesLoadingStatus);
-    const dispatch = useDispatch();
-    const {request} = useHttp();
+    const {
+        data: heroes = [],
+        isLoading,
+        isError
+    } = useGetHeroesQuery();
 
-    useEffect(() => {
-        dispatch(fetchHeroes());
+    const [deleteHero] = useDeleteHeroMutation();
 
-        // eslint-disable-next-line
-    }, []);
+    const activeFilter = useSelector(state => state.filters.activeFilter); // получаем активный фильтр из state
+
+    const filteredHeroes = useMemo(() => {
+        const filteredHeroes = heroes.slice(); // копируем массив
+
+        if (activeFilter === 'all') {
+            return filteredHeroes;
+        } else {
+            return filteredHeroes.filter(item => item.element === activeFilter);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [heroes, activeFilter])
+
+    // const filtredHeroes = useSelector(filtredHeroesSelector);
+    // const heroesLoadingStatus = useSelector(state => state.heroes.heroesLoadingStatus);
 
     // Функция берет id и по нему удаляет ненужного персонажа из store
     // ТОЛЬКО если запрос на удаление прошел успешно
     // Отслеживайте цепочку действий actions => reducers
     const onDelete = useCallback((id) => {
         // Удаление персонажа по его id
-        request(`http://localhost:3001/heroes/${id}`, "DELETE")
-            .then(data => console.log(data, 'Deleted'))
-            .then(dispatch(heroDeleted(id)))
-            .catch(err => console.log(err));
+        deleteHero(id);
         // eslint-disable-next-line  
-    }, [request]);
+    }, []);
 
-    if (heroesLoadingStatus === "loading") {
+    if (isLoading) {
         return <Spinner/>;
-    } else if (heroesLoadingStatus === "error") {
+    } else if (isError) {
         return <h5 className="text-center mt-5">Ошибка загрузки</h5>
     }
 
@@ -75,7 +84,7 @@ const HeroesList = () => {
         })
     }
 
-    const elements = renderHeroesList(filtredHeroes);
+    const elements = renderHeroesList(filteredHeroes);
     return (
         <TransitionGroup component="ul">
             {elements}
